@@ -1,29 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title> Pomodoro Timer</title> 
+<html>
+<head>
+    <title>Pomodoro Timer</title>
     <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <main class="content">
-      <section class="Timer">
-        
-      </section>
-      
-      <section class="Tasks">
-        <h3> Task List </h3>
-        <input id="taskInput" type="text" placeholder="Enter a task">
-        <button onclick="addTask()">+</button>
-        <script>
-          function addtask() {
-            
-          };           
-        </script>
-      </section>
-      
-      <section class="Settings">
-        
-      </section>
-  </body>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+</head>
 
+<body>
+
+<div class="page">
+
+    <div class="settings">
+        <button onclick="toggleSettings()">⚙</button>
+
+        <div id="settings-panel">
+            <label for="work-time">Work time</label>
+            <input id="work-time" type="number" min="1" value="25">
+
+            <label for="break-time">Break time</label>
+            <input id="break-time" type="number" min="1" value="5">
+
+            <button onclick="saveSettings()">Save</button>
+        </div>
+    </div>
+
+
+    <main>
+
+        <section class="timer-section">
+
+            <div class="timer-circle">
+
+                <div>
+                    <div id="timer"></div>
+
+                    <div class="mode" id="mode">
+                        Work
+                    </div>
+
+                    <div class="timer-buttons">
+
+                        <button
+                            onclick="toggleTimer()"
+                            id="play-button"
+                        >
+                            Play
+                        </button>
+
+                        <button onclick="resetTimer()">
+                            Reset
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+var workTime = 25;
+var breakTime = 5;
+
+var timerSpeed = 1000;
+
+var timer;
+var running = false;
+var currentMode = "work";
+
+var time = {
+    minutes: workTime,
+    seconds: 0
+};
+
+
+function toggleTimer() {
+    if (running) {
+        pauseTimer();
+    } else {
+        startTimer();
+    }
+}
+
+
+function startTimer() {
+    running = true;
+
+    document.getElementById("play-button").textContent = "Pause";
+
+    timer = setInterval(function() {
+
+        if (time.seconds > 0) {
+            time.seconds--;
+        }
+
+        else if (time.minutes > 0) {
+            time.minutes--;
+            time.seconds = 59;
+        }
+
+        else {
+            switchMode();
+        }
+
+        m.redraw();
+
+    }, timerSpeed);
+}
+
+
+function pauseTimer() {
+    running = false;
+
+    clearInterval(timer);
+
+    document.getElementById("play-button").textContent = "Play";
+}
+
+
+function switchMode() {
+    clearInterval(timer);
+
+    if (currentMode === "work") {
+        currentMode = "break";
+        time.minutes = breakTime;
+    }
+
+    else {
+        currentMode = "work";
+        time.minutes = workTime;
+    }
+
+    time.seconds = 0;
+
+    document.getElementById("mode").textContent =
+        currentMode === "work" ? "Work" : "Break";
+
+    if (running) {
+        startTimer();
+    }
+}
+
+
+function resetTimer() {
+    clearInterval(timer);
+
+    running = false;
+    currentMode = "work";
+
+    time.minutes = workTime;
+    time.seconds = 0;
+
+    document.getElementById("mode").textContent = "Work";
+    document.getElementById("play-button").textContent = "Continue";
+
+    m.redraw();
+}
+
+
+function toggleSettings() {
+    var panel = document.getElementById("settings-panel");
+
+    if (panel.style.display === "block") {
+        panel.style.display = "none";
+    }
+
+    else {
+        panel.style.display = "block";
+    }
+}
+
+
+function saveSettings() {
+    var newWorkTime = parseInt(
+        document.getElementById("work-time").value
+    );
+
+    var newBreakTime = parseInt(
+        document.getElementById("break-time").value
+    );
+
+    if (isNaN(newWorkTime) || newWorkTime < 1) {
+        alert("Work time must be at least 1 minute.");
+        return;
+    }
+
+    if (isNaN(newBreakTime) || newBreakTime < 1) {
+        alert("Break time must be at least 1 minute.");
+        return;
+    }
+
+    workTime = newWorkTime;
+    breakTime = newBreakTime;
+
+    resetTimer();
+
+    document.getElementById("settings-panel").style.display = "none";
+}
+
+
+var Timer = {
+
+    view: function() {
+
+        return m("div", {
+            class: "timer-display"
+        }, [
+
+            m("span", time.minutes),
+
+            m("span", ":"),
+
+            m("span",
+                time.seconds < 10
+                    ? "0" + time.seconds
+                    : time.seconds
+            )
+
+        ]);
+    }
+};
+
+
+m.mount(
+    document.getElementById("timer"),
+    Timer
+);
+
+</script>
+
+</body>
 </html>
