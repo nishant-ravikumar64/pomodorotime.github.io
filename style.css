@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background: #505155;
+    background: #414833;
     font-family: Arial, sans-serif;
     color: white;
 }
@@ -24,7 +24,7 @@ body {
     width: 45px;
     height: 45px;
 
-    background: #a9afc0;
+    background: #656d4a;
     color: #222;
 
     border: none;
@@ -41,7 +41,7 @@ body {
     margin-top: 8px;
     padding: 15px;
 
-    background: #999eae;
+    background: #656d4a;
     border-radius: 8px;
 }
 
@@ -68,7 +68,7 @@ body {
     border: none;
     border-radius: 4px;
 
-    background: #505155;
+    background: #414833;
     color: white;
 
     cursor: pointer;
@@ -86,10 +86,10 @@ main {
     width: 400px;
     height: 400px;
 
-    background: #f1f0f4;
+    background: #656d4a;
     border-radius: 50%;
 
-    color: #222;
+    color: #000;
 
     display: flex;
     justify-content: center;
@@ -107,7 +107,7 @@ main {
     margin-top: 10px;
 
     font-size: 20px;
-    color: #777;
+    color: #c2c5aa;
 }
 
 .timer-buttons {
@@ -121,7 +121,7 @@ main {
     border: none;
     border-radius: 5px;
 
-    background: #55565a;
+    background: #414833;
     color: white;
 
     font-size: 16px;
@@ -129,5 +129,5 @@ main {
 }
 
 .timer-buttons button:hover {
-    background: #3f4043;
+    background: #333d29;
 }
